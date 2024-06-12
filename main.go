@@ -34,7 +34,11 @@ func (t Training) distance() float64 {
 // meanSpeed возвращает среднюю скорость бега или ходьбы.
 func (t Training) meanSpeed() float64 {
 	// вставьте ваш код ниже
-	return t.distance() / t.Duration.Hours()
+	if t.Duration.Hours() == 0 {
+		return 0
+	} else {
+		return t.distance() / t.Duration.Hours()
+	}
 }
 
 // Calories возвращает количество потраченных килокалорий на тренировке.
@@ -111,7 +115,9 @@ func (r Running) Calories() float64 {
 // Это переопределенный метод TrainingInfo() из Training.
 func (r Running) TrainingInfo() InfoMessage {
 	// вставьте ваш код ниже
-	return r.Training.TrainingInfo()
+	info := r.Training.TrainingInfo()
+	info.Calories = r.Calories()
+	return info
 }
 
 // Константы для расчета потраченных килокалорий при ходьбе.
@@ -143,7 +149,9 @@ func (w Walking) Calories() float64 {
 // Это переопределенный метод TrainingInfo() из Training.
 func (w Walking) TrainingInfo() InfoMessage {
 	// вставьте ваш код ниже
-	return w.Training.TrainingInfo()
+	info := w.Training.TrainingInfo()
+	info.Calories = w.Calories()
+	return info
 }
 
 // Константы для расчета потраченных килокалорий при плавании.
@@ -167,7 +175,11 @@ type Swimming struct {
 // Это переопределенный метод Calories() из Training.
 func (s Swimming) meanSpeed() float64 {
 	// вставьте ваш код ниже
-	return float64(s.LengthPool) * float64(s.CountPool) / MInKm / s.Training.Duration.Hours()
+	if s.Training.Duration.Hours() == 0 {
+		return 0
+	} else {
+		return float64(s.LengthPool) * float64(s.CountPool) / MInKm / s.Training.Duration.Hours()
+	}
 }
 
 // Calories возвращает количество калорий, потраченных при плавании.
@@ -183,7 +195,10 @@ func (s Swimming) Calories() float64 {
 // Это переопределенный метод TrainingInfo() из Training.
 func (s Swimming) TrainingInfo() InfoMessage {
 	// вставьте ваш код ниже
-	return s.Training.TrainingInfo()
+	info := s.Training.TrainingInfo()
+	info.Calories = s.Calories()
+	info.Speed = s.meanSpeed()
+	return info
 }
 
 // ReadData возвращает информацию о проведенной тренировке.
